@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sport MISIS App</title>
+    <style>
+        :root {
+            --color-primary: #20c997;
+            --color-primary-hover: #17a589;
+            --color-secondary: #6c757d;
+            --color-background: #f8f9fa;
+            --color-surface: #ffffff;
+            --color-text: #212529;
+            --color-text-secondary: #6c757d;
+            --color-border: #dee2e6;
+            --color-success: #28a745;
+            --color-warning: #ffc107;
+            --color-danger: #dc3545;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--color-background);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: var(--color-primary);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            border-bottom: 2px solid var(--color-border);
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .tab:hover {
+            color: var(--color-primary);
+        }
+
+        .tab.active {
+            color: var(--color-primary);
+            border-bottom-color: var(--color-primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: var(--color-surface);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            font-size: 22px;
+            margin-bottom: 16px;
+            color: var(--color-text);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--color-text);
+        }
+
+        select, input[type="number"], input[type="text"], textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            font-size: 15px;
+            transition: border-color 0.3s ease;
+        }
+
+        select:focus, input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--color-primary);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .radio-item input[type="radio"] {
+            width: auto;
+            cursor: pointer;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--color-primary-hover);
+        }
+
+        .btn-secondary {
+            background: var(--color-secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn-success {
+            background: var(--color-success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--color-danger);
+            color: white;
+        }
+
+        .exercise-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .exercise-item {
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 16px;
+            background: var(--color-surface);
+        }
+
+        .exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .exercise-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--color-primary);
+        }
+
+        .exercise-params {
+            display: flex;
+            gap: 16px;
+            margin-top: 8px;
+            font-size: 14px;
+            color: var(--color-text-secondary);
+        }
+
+        .timer-display {
+            background: var(--color-primary);
+            color: white;
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .timer-display h2 {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: white;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .journal-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .journal-table th,
+        .journal-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .journal-table th {
+            background: var(--color-background);
+            font-weight: 600;
+        }
+
+        .journal-table tr:hover {
+            background: var(--color-background);
+        }
+
+        .info-section {
+            background: #e7f5ff;
+            border-left: 4px solid var(--color-primary);
+            padding: 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .info-section h3 {
+            margin-bottom: 12px;
+            color: var(--color-primary);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 12px;
+            }
+
+            header h1 {
+                font-size: 22px;
+            }
+
+            .tabs {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+            }
+
+            .tab {
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+
+            .timer-display h2 {
+                font-size: 36px;
+            }
+
+            .exercise-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .journal-table {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🏃‍♂️ Sport MISIS App</h1>
+            <p>Адаптивная физкультура для специальной медицинской группы</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('main')">Главная</button>
+            <button class="tab" onclick="switchTab('journal')">Журнал</button>
+            <button class="tab" onclick="switchTab('instructions')">Инструкция</button>
+        </div>
+
+        <!-- Main Tab -->
+        <div id="main" class="tab-content active">
+            <div class="card">
+                <h2>Параметры занятия</h2>
+                <div class="form-group">
+                    <label>Медицинская группа</label>
+                    <select id="healthGroup">
+                        <option value="3b">3б (специальная группа)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Система организма</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="cardio" name="system" value="cardio" checked>
+                            <label for="cardio">Сердечно-сосудистая</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="musculo" name="system" value="musculo">
+                            <label for="musculo">Опорно-двигательный аппарат</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Возраст (опционально)</label>
+                    <input type="number" id="age" placeholder="Введите возраст" min="17" max="30">
+                </div>
+
+                <button class="btn btn-primary" onclick="generateComplex()">Сгенерировать комплекс</button>
+            </div>
+
+            <div id="complexResult" style="display: none;">
+                <div class="card">
+                    <h2>Ваш комплекс упражнений</h2>
+                    <p><strong>Общее время:</strong> <span id="totalTime">12 минут</span></p>
+                    <div id="exerciseList" class="exercise-list"></div>
+                </div>
+
+                <div class="card">
+                    <div class="timer-display">
+                        <h2 id="timerDisplay">00:00</h2>
+                        <p id="currentExercise">Нажмите "Старт" для начала</p>
+                    </div>
+                    <div class="timer-controls">
+                        <button class="btn btn-success" id="startBtn" onclick="startTimer()">▶ Старт</button>
+                        <button class="btn btn-secondary" id="pauseBtn" onclick="pauseTimer()" style="display: none;">⏸ Пауза</button>
+                        <button class="btn btn-danger" id="resetBtn" onclick="resetTimer()">⏹ Сброс</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Journal Tab -->
+        <div id="journal" class="tab-content">
+            <div class="card">
+                <h2>Добавить запись в журнал</h2>
+                <div class="form-group">
+                    <label>Дата</label>
+                    <input type="date" id="journalDate">
+                </div>
+                <div class="form-group">
+                    <label>Пульс до занятия (уд/мин)</label>
+                    <input type="number" id="pulseBefore" min="50" max="150">
+                </div>
+                <div class="form-group">
+                    <label>Пульс после занятия (уд/мин)</label>
+                    <input type="number" id="pulseAfter" min="50" max="150">
+                </div>
+                <div class="form-group">
+                    <label>Самочувствие (1-5)</label>
+                    <select id="feeling">
+                        <option value="1">1 - Плохо</option>
+                        <option value="2">2 - Неудовлетворительно</option>
+                        <option value="3">3 - Нормально</option>
+                        <option value="4">4 - Хорошо</option>
+                        <option value="5">5 - Отлично</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Заметки</label>
+                    <textarea id="notes" rows="3" placeholder="Дополнительные заметки"></textarea>
+                </div>
+                <button class="btn btn-primary" onclick="addJournalEntry()">Добавить запись</button>
+                <button class="btn btn-secondary" onclick="exportJournal()" style="margin-left: 10px;">Экспорт CSV</button>
+            </div>
+
+            <div class="card">
+                <h2>История тренировок</h2>
+                <table class="journal-table" id="journalTable">
+                    <thead>
+                        <tr>
+                            <th>Дата</th>
+                            <th>Пульс до/после</th>
+                            <th>Самочувствие</th>
+                            <th>Заметки</th>
+                        </tr>
+                    </thead>
+                    <tbody id="journalBody">
+                        <tr>
+                            <td colspan="4" style="text-align: center; color: var(--color-text-secondary);">Нет записей</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Instructions Tab -->
+        <div id="instructions" class="tab-content">
+            <div class="card">
+                <h2>О приложении</h2>
+                <p>Sport MISIS App — это веб-приложение для студентов специальной медицинской группы здоровья 3б. Приложение помогает проводить безопасные оздоровительные занятия с учетом медицинских ограничений.</p>
+
+
+            <div class="info-section">
+                <h3>Как использовать</h3>
+                <ol style="padding-left: 20px;">
+                    <li>На главной странице выберите систему организма (сердечно-сосудистая или опорно-двигательный аппарат)</li>
+                    <li>Нажмите "Сгенерировать комплекс" для получения индивидуального набора упражнений</li>
+                    <li>Используйте таймер для выполнения упражнений</li>
+                    <li>После занятия внесите данные в журнал самоконтроля</li>
+                </ol>
+            </div>
+
+            <div class="info-section">
+                <h3>Важные рекомендации</h3>
+                <ul style="padding-left: 20px;">
+                    <li>Целевой пульс во время занятий: <strong>до 130 уд/мин</strong></li>
+                    <li>При ухудшении самочувствия немедленно прекратите занятие</li>
+                    <li>Выполняйте упражнения плавно, без резких движений</li>
+                    <li>Следите за дыханием: не задерживайте дыхание</li>
+                    <li>Рекомендуемая частота занятий: 3-4 раза в неделю</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>Противопоказания</h2>
+                <p>⚠️ <strong>Не выполняйте упражнения при:</strong></p>
+                <ul style="padding-left: 20px; margin-top: 10px;">
+                    <li>Обострении хронических заболеваний</li>
+                    <li>Повышенной температуре тела</li>
+                    <li>Острых болевых ощущениях</li>
+                    <li>Головокружении или слабости</li>
+                </ul>
+                <p style="margin-top: 16px;">Перед началом занятий проконсультируйтесь с врачом.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const exercises = {
+            cardio: [
+                {
+                    name: 'Ходьба на месте',
+                    description: 'Спокойная ходьба на месте с движением рук. Дышите равномерно.',
+                    duration: 120,
+                    reps: '-',
+                    video: 'https://www.youtube.com/watch?v=example1'
+                },
+                {
+                    name: 'Дыхательная гимнастика',
+                    description: 'Глубокий вдох через нос, медленный выдох через рот. Руки на живот.',
+                    duration: 60,
+                    reps: '8-10 циклов',
+                    video: 'https://www.youtube.com/watch?v=example2'
+                },
+                {
+                    name: 'Круговые движения руками',
+                    description: 'Медленные круговые движения руками вперед и назад.',
+                    duration: 45,
+                    reps: '10 раз',
+                    video: 'https://www.youtube.com/watch?v=example3'
+                },
+                {
+                    name: 'Наклоны головы',
+                    description: 'Плавные наклоны головы вперед, назад, влево, вправо.',
+                    duration: 40,
+                    reps: '8 раз',
+                    video: 'https://www.youtube.com/watch?v=example4'
+                },
+                {
+                    name: 'Подъем рук через стороны',
+                    description: 'Плавный подъем рук через стороны вверх и опускание.',
+                    duration: 50,
+                    reps: '10-12 раз',
+                    video: 'https://www.youtube.com/watch?v=example5'
+                },
+                {
+                    name: 'Перекаты с носка на пятку',
+                    description: 'Стоя на месте, плавно перекатываться с носков на пятки.',
+                    duration: 60,
+                    reps: '12-15 раз',
+                    video: 'https://www.youtube.com/watch?v=example6'
+                },
+                {
+                    name: 'Заминка - растяжка',
+                    description: 'Легкая растяжка мышц рук, ног и спины.',
+                    duration: 90,
+                    reps: '-',
+                    video: 'https://www.youtube.com/watch?v=example7'
+                }
+            ],
+            musculo: [
+                {
+                    name: 'Подъем на носки',
+                    description: 'Стоя, плавно поднимайтесь на носки, руки вверх, затем опускайтесь.',
+                    duration: 45,
+                    reps: '10-12 раз',
+                    video: 'https://www.youtube.com/watch?v=example8'
+                },
+                {
+                    name: 'Полуприседы',
+                    description: 'Неглубокие приседания с прямой спиной, руки перед собой.',
+                    duration: 50,
+                    reps: '8-10 раз',
+                    video: 'https://www.youtube.com/watch?v=example9'
+                },
+                {
+                    name: 'Прыжки врозь (без прыжка)',
+                    description: 'Попеременные шаги в стороны с разведением рук.',
+                    duration: 60,
+                    reps: '10 раз',
+                    video: 'https://www.youtube.com/watch?v=example10'
+                },
+                {
+                    name: 'Вращение плечами',
+                    description: 'Круговые движения плечами вперед и назад.',
+                    duration: 40,
+                    reps: '12 раз',
+                    video: 'https://www.youtube.com/watch?v=example11'
+                },
+                {
+                    name: 'Наклоны в стороны',
+                    description: 'Плавные наклоны туловища влево и вправо, руки на поясе.',
+                    duration: 50,
+                    reps: '8-10 раз',
+                    video: 'https://www.youtube.com/watch?v=example12'
+                },
+                {
+                    name: 'Подъем коленей',
+                    description: 'Попеременный подъем коленей к груди, стоя на месте.',
+                    duration: 60,
+                    reps: '10-12 раз',
+                    video: 'https://www.youtube.com/watch?v=example13'
+                },
+                {
+                    name: 'Круговые движения стопами',
+                    description: 'Сидя или стоя, вращение стопами по часовой и против часовой стрелки.',
+                    duration: 45,
+                    reps: '10 раз',
+                    video: 'https://www.youtube.com/watch?v=example14'
+                },
+                {
+                    name: 'Растяжка спины и ног',
+                    description: 'Легкая растяжка мышц спины, бедер и икр.',
+                    duration: 90,
+                    reps: '-',
+                    video: 'https://www.youtube.com/watch?v=example15'
+                }
+            ]
+        };
+
+        let currentExercises = [];
+        let timerInterval = null;
+        let currentExerciseIndex = 0;
+        let timeRemaining = 0;
+        let isPaused = false;
+        let journalData = JSON.parse(localStorage.getItem('journalData')) || [];
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+
+            if (tabName === 'journal') {
+                loadJournal();
+            }
+        }
+
+        function generateComplex() {
+            const system = document.querySelector('input[name="system"]:checked').value;
+            const exercisePool = exercises[system];
+            
+            const numberOfExercises = Math.floor(Math.random() * 2) + 6;
+            currentExercises = [];
+            
+            const shuffled = [...exercisePool].sort(() => 0.5 - Math.random());
+            currentExercises = shuffled.slice(0, numberOfExercises);
+
+            displayExercises();
+            document.getElementById('complexResult').style.display = 'block';
+            resetTimer();
+        }
+
+        function displayExercises() {
+            const container = document.getElementById('exerciseList');
+            const totalTime = currentExercises.reduce((sum, ex) => sum + ex.duration, 0);
+            
+            document.getElementById('totalTime').textContent = Math.round(totalTime / 60) + ' минут';
+            
+            container.innerHTML = currentExercises.map((exercise, index) => `
+                <div class="exercise-item">
+                    <div class="exercise-header">
+                        <div>
+                            <div class="exercise-title">${index + 1}. ${exercise.name}</div>
+                            <div class="exercise-params">
+                                <span>⏱ ${exercise.duration} сек</span>
+                                <span>🔄 ${exercise.reps}</span>
+                            </div>
+                        </div>
+                        <span class="badge badge-success">Легкая нагрузка</span>
+                    </div>
+                    <p>${exercise.description}</p>
+                </div>
+            `).join('');
+        }
+
+        function startTimer() {
+            if (currentExercises.length === 0) {
+                alert('Сначала сгенерируйте комплекс упражнений');
+                return;
+            }
+
+            if (currentExerciseIndex === 0 && timeRemaining === 0) {
+                timeRemaining = currentExercises[0].duration;
+                updateTimerDisplay();
+            }
+
+            isPaused = false;
+            document.getElementById('startBtn').style.display = 'none';
+            document.getElementById('pauseBtn').style.display = 'inline-block';
+
+            timerInterval = setInterval(() => {
+                if (!isPaused) {
+                    timeRemaining--;
+                    updateTimerDisplay();
+
+                    if (timeRemaining <= 0) {
+                        playBeep();
+                        currentExerciseIndex++;
+
+                        if (currentExerciseIndex < currentExercises.length) {
+                            timeRemaining = currentExercises[currentExerciseIndex].duration;
+                        } else {
+                            clearInterval(timerInterval);
+                            alert('Комплекс упражнений завершен! Не забудьте записать данные в журнал.');
+                            resetTimer();
+                        }
+                    }
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            isPaused = true;
+            document.getElementById('startBtn').style.display = 'inline-block';
+            document.getElementById('pauseBtn').style.display = 'none';
+            clearInterval(timerInterval);
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            currentExerciseIndex = 0;
+            timeRemaining = 0;
+            isPaused = false;
+            
+            document.getElementById('timerDisplay').textContent = '00:00';
+            document.getElementById('currentExercise').textContent = 'Нажмите "Старт" для начала';
+            document.getElementById('startBtn').style.display = 'inline-block';
+            document.getElementById('pauseBtn').style.display = 'none';
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            document.getElementById('timerDisplay').textContent = 
+                `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            
+            if (currentExercises[currentExerciseIndex]) {
+                document.getElementById('currentExercise').textContent = 
+                    `Упражнение ${currentExerciseIndex + 1}: ${currentExercises[currentExerciseIndex].name}`;
+            }
+        }
+
+        function playBeep() {
+            const audio = new AudioContext();
+            const oscillator = audio.createOscillator();
+            const gainNode = audio.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audio.destination);
+            
+            oscillator.frequency.value = 800;
+            oscillator.type = 'sine';
+            
+            gainNode.gain.setValueAtTime(0.3, audio.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audio.currentTime + 0.3);
+            
+            oscillator.start(audio.currentTime);
+            oscillator.stop(audio.currentTime + 0.3);
+        }
+
+        function addJournalEntry() {
+            const date = document.getElementById('journalDate').value;
+            const pulseBefore = document.getElementById('pulseBefore').value;
+            const pulseAfter = document.getElementById('pulseAfter').value;
+            const feeling = document.getElementById('feeling').value;
+            const notes = document.getElementById('notes').value;
+
+            if (!date || !pulseBefore || !pulseAfter) {
+                alert('Заполните обязательные поля: дата и пульс');
+                return;
+            }
+
+            const entry = {
+                date,
+                pulseBefore: parseInt(pulseBefore),
+                pulseAfter: parseInt(pulseAfter),
+                feeling: parseInt(feeling),
+                notes
+            };
+
+            journalData.push(entry);
+            localStorage.setItem('journalData', JSON.stringify(journalData));
+
+            document.getElementById('journalDate').value = '';
+            document.getElementById('pulseBefore').value = '';
+            document.getElementById('pulseAfter').value = '';
+            document.getElementById('feeling').value = '3';
+            document.getElementById('notes').value = '';
+
+            loadJournal();
+            alert('Запись добавлена в журнал');
+        }
+
+        function loadJournal() {
+            const tbody = document.getElementById('journalBody');
+            
+            if (journalData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--color-text-secondary);">Нет записей</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = journalData.map(entry => {
+                const feelingText = ['Плохо', 'Неудовл.', 'Нормально', 'Хорошо', 'Отлично'][entry.feeling - 1];
+                return `
+                    <tr>
+                        <td>${entry.date}</td>
+                        <td>${entry.pulseBefore} / ${entry.pulseAfter}</td>
+                        <td>${feelingText}</td>
+                        <td>${entry.notes || '-'}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function exportJournal() {
+            if (journalData.length === 0) {
+                alert('Журнал пуст');
+                return;
+            }
+
+            let csv = 'Дата,Пульс до,Пульс после,Самочувствие,Заметки\n';
+            journalData.forEach(entry => {
+                csv += `${entry.date},${entry.pulseBefore},${entry.pulseAfter},${entry.feeling},"${entry.notes}"\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'journal_adaptivfiz_3b.csv';
+            link.click();
+        }
+
+        document.getElementById('journalDate').valueAsDate = new Date();
+        loadJournal();
+    </script>
+</body>
+</html>
+
